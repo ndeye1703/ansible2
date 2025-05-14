@@ -1,0 +1,4 @@
+[routeurs]
+
+csr1000 ansible_host=161.55.51
+

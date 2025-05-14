@@ -1,0 +1,38 @@
+- name: Acte 1 - essai csr1000
+  # On va agir sur l'hôte csr1000 dans cet acte
+  hosts: csr1000
+  # Passe l'étape permettant de récupérer des informations sur
+  #   l'hôte pour gagner du temps
+  gather_facts: false
+
+- name: Configuration des interfaces Cisco L3
+  hosts: csr1000
+  gather_facts: no
+  tasks:
+- name: Configurer les interface L3
+      cisco.ios.ios_l3_interfaces:
+        config:
+- name: GigabitEthernet1
+            ipv4:
+              - address: 
+              secondary: true
+- name: GigabitEthernet2
+            ipv4:
+              - address: 192.168.2.1/24
+- name: GigabitEthernet3
+            ipv4:
+              - address: 192.168.3.1/24
+- name: GigabitEthernet4
+            ipv4:
+              - address: 192.168.4.1/24
+        state: merged
+
+- name: Activer les interfaces
+      ios_config:
+        lines:
+          - no shutdown
+        parents: 
+          - interface GigabitEthernet1
+          - interface GigabitEthernet2
+          - interface GigabitEthernet3
+          - interface GigabitEthernet4
